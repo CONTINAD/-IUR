@@ -19,12 +19,22 @@ app.get('/api/stats', (req, res) => {
     });
 });
 
+let isRunning = false;
+
 // Run automation every minute
 cron.schedule('* * * * *', async () => {
+    if (isRunning) {
+        console.log("Skipping cycle: Previous run still in progress.");
+        return;
+    }
+
+    isRunning = true;
     try {
         await runCycle();
     } catch (e) {
         console.error("Cron Error:", e);
+    } finally {
+        isRunning = false;
     }
 });
 
