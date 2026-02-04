@@ -1,8 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Twitter, Send, ExternalLink, Copy, Check, TrendingUp, Users, Zap, DollarSign } from 'lucide-react';
+import { ExternalLink, Copy, Check, TrendingUp, Users, Zap, DollarSign } from 'lucide-react';
 import { useState } from 'react';
 import HeroSection from './components/HeroSection';
+
+const XLogo = ({ className }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 // Navbar Component
 const Navbar = () => (
@@ -19,7 +25,7 @@ const Navbar = () => (
       </div>
       <div className="flex items-center gap-4">
         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400 transition-colors">
-          <Twitter size={20} />
+          <XLogo className="w-5 h-5" />
         </a>
         <button className="btn-primary text-sm py-2 px-4 shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all">Buy $IUR</button>
       </div>
@@ -62,7 +68,7 @@ const StatsSection = () => {
   ];
 
   return (
-    <section className="py-16 border-t border-b border-cyan-500/10">
+    <section id="stats" className="py-16 border-t border-b border-cyan-500/10">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {stats.map((stat, i) => (
@@ -84,6 +90,11 @@ const StatsSection = () => {
     </section>
   );
 };
+
+// ... (HowItWorksSection and TokenomicsSection omitted for brevity, they are unchanged but included in context if needed by replace tool logic, but I will skip them in replacement block if possible or include if needed for context matching. I'll include the Footer changes here as well but the tool call should probably target replacing the top file parts and then Footer separately or do strict replacements. I'll replace the top chunk first.)
+
+// Actually, I'll do this in two chunks or use multi_replace. Multi_replace is better.
+
 
 // How It Works Section
 const HowItWorksSection = () => {
@@ -239,8 +250,9 @@ const Footer = () => (
         <span className="pixel-font text-cyan-400 text-sm">$IUR</span>
       </div>
       <div className="flex justify-center gap-6 mb-8">
-        <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors"><Twitter size={24} /></a>
-        <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors"><Send size={24} /></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400 transition-colors">
+          <XLogo className="w-6 h-6" />
+        </a>
       </div>
       <p className="text-gray-600 text-sm">© 2026 Infinite USDC Rewards. All rights reserved.</p>
       <p className="text-gray-700 text-xs mt-2">Not financial advice. DYOR.</p>

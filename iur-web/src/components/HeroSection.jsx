@@ -77,7 +77,10 @@ const HeroSection = () => {
                     </button>
 
                     {/* Secondary Glass Button */}
-                    <button className="px-10 py-5 glass-premium text-gray-300 hover:text-white rounded-none font-bold text-lg tracking-wider transition-all hover:bg-white/5 flex items-center gap-3">
+                    <button
+                        onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}
+                        className="px-10 py-5 glass-premium text-gray-300 hover:text-white rounded-none font-bold text-lg tracking-wider transition-all hover:bg-white/5 flex items-center gap-3"
+                    >
                         <BarChart2 className="w-5 h-5 text-gold-400" />
                         VIEW METRICS
                     </button>
