@@ -151,7 +151,8 @@ body {
   }
 
   .glass-premium {
-    @apply bg-dark-900/60 backdrop-blur-2xl border border-cyan-500/20 shadow-[0_0_30px_rgba(0, 234, 255, 0.1)];
+    @apply bg-dark-900/60 backdrop-blur-2xl border border-cyan-500/20;
+    box-shadow: 0 0 30px rgba(0, 234, 255, 0.1);
   }
 
   .pixel-corners {
