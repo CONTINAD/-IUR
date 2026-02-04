@@ -1,7 +1,7 @@
 const { Connection, Keypair, PublicKey, VersionedTransaction, Transaction, sendAndConfirmTransaction, ComputeBudgetProgram, SystemProgram, LAMPORTS_PER_SOL } = require('@solana/web3.js');
 const { getAssociatedTokenAddress, createTransferInstruction, TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction } = require('@solana/spl-token');
 const bs58 = require('bs58');
-const fetch = require('node-fetch');
+const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
@@ -67,25 +67,21 @@ async function claimFromPumpFun(wallet) {
     try {
         console.log("[PumpFun] Attempting to collect creator fees via PumpPortal...");
 
-        const response = await fetch('https://pumpportal.fun/api/trade-local', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                publicKey: wallet.publicKey.toBase58(),
-                action: 'collectCreatorFee',
-                priorityFee: 0.0001,
-                pool: 'pump'
-            })
+        const response = await axios.post('https://pumpportal.fun/api/trade-local', {
+            publicKey: wallet.publicKey.toBase58(),
+            action: 'collectCreatorFee',
+            priorityFee: 0.0001,
+            pool: 'pump'
+        }, {
+            responseType: 'arraybuffer' // Critical for receiving binary tx data
         });
 
         if (response.status !== 200) {
-            const error = await response.text();
-            console.log(`[PumpFun] No fees claimable or Error: ${error}`);
+            console.log(`[PumpFun] No fees claimable (Status ${response.status})`);
             return 0;
         }
 
-        const data = await response.arrayBuffer();
-        const tx = VersionedTransaction.deserialize(new Uint8Array(data));
+        const tx = VersionedTransaction.deserialize(new Uint8Array(response.data));
         tx.sign([wallet]);
 
         const signature = await connection.sendTransaction(tx, { skipPreflight: false });
@@ -122,17 +118,13 @@ async function getHoldersHelius(mintAddress) {
     console.log(`[Helius] Fetching holders for ${mintAddress.toBase58()}...`);
 
     while (hasMore) {
-        const response = await fetch(HELIUS_RPC_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                jsonrpc: '2.0', id: '1',
-                method: 'getTokenAccounts',
-                params: { mint: mintAddress.toBase58(), limit: 1000, cursor: cursor }
-            })
+        const response = await axios.post(HELIUS_RPC_URL, {
+            jsonrpc: '2.0', id: '1',
+            method: 'getTokenAccounts',
+            params: { mint: mintAddress.toBase58(), limit: 1000, cursor: cursor }
         });
 
-        const data = await response.json();
+        const data = response.data;
         if (data.error) throw new Error(`Helius Error: ${data.error.message}`);
 
         const result = data.result;
@@ -214,14 +206,18 @@ async function distributeUSDC(wallet, usdcAmount, holders, totalTokens) {
 // 4. Swap Logic (Jupiter V6)
 async function swapSolToUsdc(wallet, lamports) {
     try {
-        const quote = await (await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=${USDC_MINT.toString()}&amount=${lamports}&slippageBps=${SLIPPAGE_BPS}`)).json();
+        const quoteResponse = await axios.get(`https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=${USDC_MINT.toString()}&amount=${lamports}&slippageBps=${SLIPPAGE_BPS}`);
+        const quote = quoteResponse.data;
+
         if (quote.error) return 0;
 
-        const { swapTransaction } = await (await fetch('https://quote-api.jup.ag/v6/swap', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ quoteResponse: quote, userPublicKey: wallet.publicKey.toString(), prioritizationFeeLamports: 100000 })
-        })).json();
+        const swapResponse = await axios.post('https://quote-api.jup.ag/v6/swap', {
+            quoteResponse: quote,
+            userPublicKey: wallet.publicKey.toString(),
+            prioritizationFeeLamports: 100000
+        });
+
+        const { swapTransaction } = swapResponse.data;
 
         const tx = VersionedTransaction.deserialize(Buffer.from(swapTransaction, 'base64'));
         tx.sign([wallet]);

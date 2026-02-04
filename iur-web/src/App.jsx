@@ -2,10 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Twitter, Send, ExternalLink, Copy, Check, TrendingUp, Users, Zap, DollarSign } from 'lucide-react';
 import { useState } from 'react';
+import HeroSection from './components/HeroSection';
 
 // Navbar Component
 const Navbar = () => (
-  <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-0 border-b border-cyan-500/10">
+  <nav className="fixed top-0 left-0 right-0 z-50 glass-premium border-0 border-b border-cyan-500/10">
     <div className="container mx-auto px-6 py-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <img src="/logo.png" alt="$IUR" className="w-10 h-10 glow-cyan" />
@@ -20,97 +21,11 @@ const Navbar = () => (
         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400 transition-colors">
           <Twitter size={20} />
         </a>
-        <button className="btn-primary text-sm py-2 px-4">Buy $IUR</button>
+        <button className="btn-primary text-sm py-2 px-4 shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all">Buy $IUR</button>
       </div>
     </div>
   </nav>
 );
-
-// Hero Section
-const HeroSection = () => {
-  const [copied, setCopied] = useState(false);
-  const CA = "COMING SOON";
-
-  const copyCA = () => {
-    navigator.clipboard.writeText(CA);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <section className="min-h-screen flex items-center justify-center pt-20 bg-grid relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="container mx-auto text-center relative z-10">
-        {/* Main Logo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="mb-8"
-        >
-          <img
-            src="/logo.png"
-            alt="Infinite USDC Strategy"
-            className="w-48 h-48 md:w-64 md:h-64 mx-auto animate-float glow-cyan"
-          />
-        </motion.div>
-
-        {/* Banner */}
-        <motion.img
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          src="/banner.png"
-          alt="Infinite USDC Strategy Banner"
-          className="max-w-3xl w-full mx-auto mb-8"
-        />
-
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-10"
-        >
-          The first token that automatically claims <span className="text-cyan-400 font-semibold">global Pump.fun fees</span> and distributes <span className="text-green-400 font-semibold">USDC</span> directly to holders.
-        </motion.p>
-
-        {/* Contract Address */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="glass-card inline-flex items-center gap-4 px-6 py-4 mb-10 cursor-pointer hover:border-cyan-500/30 transition-all"
-          onClick={copyCA}
-        >
-          <span className="text-gray-400 text-sm">CA:</span>
-          <span className="text-cyan-400 font-mono">{CA}</span>
-          {copied ? <Check size={18} className="text-green-400" /> : <Copy size={18} className="text-gray-400" />}
-        </motion.div>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <button className="btn-primary flex items-center justify-center gap-2">
-            <Zap size={20} />
-            Buy on Pump.fun
-          </button>
-          <button className="btn-secondary flex items-center justify-center gap-2">
-            <TrendingUp size={20} />
-            View Chart
-          </button>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
 
 // Stats Section
 const StatsSection = () => {
@@ -198,7 +113,7 @@ const HowItWorksSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: i * 0.15 }}
               viewport={{ once: true }}
-              className="glass-card p-8 relative overflow-hidden group hover:border-cyan-500/30 transition-all"
+              className="glass-premium p-8 relative overflow-hidden group hover:border-cyan-500/30 transition-all"
             >
               <div className="absolute -top-6 -right-6 text-[120px] font-black text-cyan-500/5 group-hover:text-cyan-500/10 transition-colors">
                 {step.num}
@@ -234,7 +149,7 @@ const TokenomicsSection = () => (
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="glass-card p-8"
+          className="glass-premium p-8"
         >
           <h3 className="text-xl font-bold mb-6 text-cyan-400">Supply</h3>
           <ul className="space-y-4">
@@ -257,7 +172,7 @@ const TokenomicsSection = () => (
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="glass-card p-8"
+          className="glass-premium p-8"
         >
           <h3 className="text-xl font-bold mb-6 text-yellow-400">Distribution</h3>
           <ul className="space-y-4">
