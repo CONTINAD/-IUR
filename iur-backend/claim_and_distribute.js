@@ -10,7 +10,7 @@ const RPC_URL = process.env.RPC_URL || 'https://api.mainnet-beta.solana.com';
 const HELIUS_RPC_URL = process.env.HELIUS_RPC_URL || RPC_URL; // Use Helius if available for DAS
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
-const IUR_MINT = process.env.IUR_MINT ? new PublicKey(process.env.IUR_MINT) : null;
+const IUR_MINT = (process.env.IUR_MINT && process.env.IUR_MINT.length > 30) ? new PublicKey(process.env.IUR_MINT) : null;
 const SLIPPAGE_BPS = 50;
 const PRIORITY_FEE_MICRO_LAMPORTS = 100000;
 
